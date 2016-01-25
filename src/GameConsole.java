@@ -10,12 +10,13 @@ import java.awt.event.ActionListener;
  */
 public class GameConsole extends JFrame implements ActionListener{
     
-    int score1Value;
-    int score2Value;
+    int score1Value; //stores the score of player 1.
+    int score2Value; //store the score of player 2.
 
     Player player1 = new Player();
     Player player2 = new Player();
     Player allCards = new Player();
+
     private JPanel mainPanel;
     private JButton showCardPlayer1Button;
     private JButton showCardPlayer2Button;
@@ -26,25 +27,32 @@ public class GameConsole extends JFrame implements ActionListener{
     private JPanel panelPlayer1;
     private JPanel panelPlayer2;
     private JTextField tempResult;
-    private int chanceController = 1;
-    private int buttonActivator = 0;
+    private int chanceController = 1;//if value = 1 =>chance of player 1 else chance of player 2
+    private int buttonActivator = 0; // disables the buttons not to be used.
 
     public GameConsole() {
 
         super();
-        score1Value = 0;
-        score2Value = 0;
-        score1.setText(Resources.score + score1Value);
-        score2.setText(Resources.score + score2Value);
+        this.score1Value = 0;
+        this.score2Value = 0;
+        this.score1.setText(Resources.score + score1Value);
+        this.score2.setText(Resources.score + score2Value);
 
+
+        showCardPlayer1Button.addActionListener(this);
+        showCardPlayer2Button.addActionListener(this);
+        goButton.addActionListener(this);
 
         this.setContentPane(mainPanel);
-        this.setPreferredSize(new Dimension(800,800));
+        this.mainPanel.setPreferredSize(new Dimension(800, 800));
         this.setVisible(true);
+        this.pack();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        goButton.setEnabled(false);
-        choice.setEnabled(false);
-        showCardPlayer2Button.setEnabled(false);
+
+        //All buttons disabled,for the first time except the show button for player 1
+        this.goButton.setEnabled(false);
+        this.choice.setEnabled(false);
+        this.showCardPlayer2Button.setEnabled(false);
 
         this.showCardPlayer1Button.setActionCommand("show1");
         this.showCardPlayer2Button.setActionCommand("show2");
@@ -57,46 +65,48 @@ public class GameConsole extends JFrame implements ActionListener{
         Card Ortan = new Card("Ortan", 6.7, 190, 30, 150, 5,11);
         Card BigShow = new Card("BigShow", 6.4, 200, 9, 180,6, 8);
 
-        allCards.add(Ortan);
-        allCards.add(BigShow);
-        allCards.add(Batista);
-        allCards.add(Rock);
-        allCards.add(john);
-        allCards.add(HHH);
-        allCards.shuffle();
-
-    distributeCards();
+        this.allCards.add(Ortan);
+        this.allCards.add(BigShow);
+        this.allCards.add(Batista);
+        this.allCards.add(Rock);
+        this.allCards.add(john);
+        this.allCards.add(HHH);
+        this.allCards.shuffle();
+        this.distributeCards();
 
 
     }
 
     private void distributeCards() {
 
-        int i;
-        for(i=0;i<allCards.size();i++)
+
+        for(int i=0;i<allCards.size();i++)
         {
 
             if(i<(allCards.size()/2)){
 
 
                   player1.add(allCards.get(i));
+                System.out.println("Added to 1" + allCards.get(i).name);
 
             }
             else
             {
 
                     player2.add(allCards.get(i));
-
+                System.out.println("Added to 2" + allCards.get(i).name);
             }
 
         }
+        player1.shuffle();
+        player2.shuffle();
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        JButton buttonPressed = (JButton) (e.getSource());
+        JButton buttonPressed = (JButton)(e.getSource());
         int winningTeam = -1;
         Card activeCard1 = null;
         Card activeCard2 = null;
@@ -115,13 +125,28 @@ public class GameConsole extends JFrame implements ActionListener{
         }
         if (buttonPressed.getActionCommand() == "show1" && chanceController == 1) {
 
-            panelPlayer1.add(player1.get(0).playerCard);
+
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////
+            //this statement is throwing null pointer exception/
+            //i am just adding playerCard panel of from Card to the panelPlayer1 panel of GameConsole.
+
+
+
+             this.panelPlayer1.add(player1.get(0).playerCard);
+
+
 
 
         } else if (buttonPressed.getActionCommand() == "show2" && chanceController == 2) {
 
-            panelPlayer2.add(player2.get(0).playerCard);
 
+            //////////////////////////////////////////////////////////////////////////
+            ////////////////////////////////////////////////////////////////////////
+            //this statement is throwing null pointer exception/
+            //i am just adding playerCard panel of from Card to the panelPlayer2 panel of GameConsole.
+
+            panelPlayer2.add(player2.get(0).playerCard);
 
         } else {
 
@@ -130,26 +155,27 @@ public class GameConsole extends JFrame implements ActionListener{
 
             if (winningTeam == 1) {
 
-                tempResult.setText("Player 1 wins this chance.");
-                score1Value += 10;
+                this.tempResult.setText("Player 1 wins this chance.");
+                this.score1Value += 10;
                 this.player1.add(activeCard2);
                 this.player1.shuffle();
                 this.player2.set(0, this.player2.get(this.player2.size() - 1));
                 this.player2.remove(player2.size() - 1);
                 this.player2.shuffle();
-                chanceController = 1;
+                this.chanceController = 1;
             } else if (winningTeam == 2) {
 
-                score2Value += 10;
+                this.tempResult.setText("Player 2 wins this chance.");
+                this.score2Value += 10;
                 this.player2.add(activeCard1);
                 this.player2.shuffle();
                 this.player1.set(0, this.player1.get(this.player1.size() - 1));
                 this.player1.remove(0);
                 this.player1.shuffle();
-                chanceController = 2;
+                this.chanceController = 2;
 
             } else if (winningTeam == 0) {
-                tempResult.setText("DRAW");
+                this.tempResult.setText("DRAW");
             }
             buttonActivator = toggleButtonActivator();
             if (buttonActivator == 1) {
