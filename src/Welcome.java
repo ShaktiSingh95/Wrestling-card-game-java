@@ -21,8 +21,8 @@ public class Welcome extends JFrame implements ActionListener{
         this.exit.addActionListener(this);
         this.setContentPane(panel1);
         this.panel1.setPreferredSize(new Dimension(400, 400));
-        this.setPreferredSize(new Dimension(400,400));
         this.setVisible(true);
+        this.pack();
 
     }
     @Override

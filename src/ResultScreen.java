@@ -12,9 +12,10 @@ public class ResultScreen extends JFrame{
     {
         super();
 
-        this.result.setText("PLAYER" + winner + "WINS");
+        this.result.setText("     PLAYER " + winner + " WINS");
         this.setContentPane(result);
-        this.setPreferredSize(new Dimension(500,500));
+        this.result.setPreferredSize(new Dimension(500,500));
         this.setVisible(true);
+        this.pack();
     }
 }
